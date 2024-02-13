@@ -1,0 +1,17 @@
+#cocheImagen{
+    width: 650px;
+    border-radius: 20px;
+}
+
+#imagen_cabezera{
+    width: 100px;
+}
+
+#cabezera{
+    background-color: rgb(229, 229, 229);
+}
+
+.error{
+    color: red;
+    text-align: center;
+}
