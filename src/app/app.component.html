@@ -15,7 +15,7 @@
     </div>
 
     <div class="col-7" id="formularioBox">
-      <form [formGroup]="formularioContacto" (ngSubmit)="submit()">
+      <form [formGroup]="formularioContacto">
         
 
         <div class="row mt-5">
@@ -24,6 +24,12 @@
             <span class="input-group-text">Numero factura: (*)</span>
             <input type="text" class="form-control" formControlName="numeroFactura">
         </div>
+        <span class="error" *ngIf="this.formularioContacto.get('numeroFactura')?.errors?.['required']">
+          El numero de factura es obligatorio.
+        </span>
+      <span class="error" *ngIf="this.formularioContacto.get('numeroFactura')?.errors?.['pattern']">
+          El numero de factura debe tener entre 1-6 digitos.
+        </span>
         </div>
 
         <div class="col-4">
@@ -31,6 +37,15 @@
               <span class="input-group-text">Fecha: (*)</span>
               <input type="text" class="form-control" formControlName="fecha" placeholder="dd/mm/aaaa">
           </div>
+          <span class="error" *ngIf="this.formularioContacto.get('fecha')?.errors?.['required']">
+            La fecha es obligatoria.
+          </span>
+        <span class="error" *ngIf="this.formularioContacto.get('fecha')?.errors?.['pattern']">
+            La fecha debe estar en formato dd/mm/yyyy.
+          </span>
+        <span class="error" *ngIf="this.formularioContacto.get('fecha')?.errors?.['fecha']">
+            La fecha debe ser valida, mayor del dia actual.
+          </span>
       </div>
     </div>
 
@@ -87,7 +102,7 @@
     <div class="col-4">
       <div class="input-group">
           <span class="input-group-text">Provincia:</span>
-          <input type="text" class="form-control" formControlName="provincia" readonly value="{{provincia}}">
+          <input type="text" class="form-control" formControlName="provincia" readonly [value]="provincia">
       </div>
   </div>
 
@@ -96,25 +111,43 @@
         <span class="input-group-text">Ciudad:</span>
         <input type="text" class="form-control" formControlName="ciudad">
     </div>
+    <span class="error" *ngIf="this.formularioContacto.get('ciudad')?.errors?.['required']">
+      La ciudad es obligatoria.
+    </span>
+  <span class="error" *ngIf="this.formularioContacto.get('ciudad')?.errors?.['minlength']">
+      La ciudad debe tener como minimo 5 caracteres.
+    </span>
+  <span class="error" *ngIf="this.formularioContacto.get('ciudad')?.errors?.['maxlength']">
+      La ciudad debe tener como maximo 15 caracteres.
+    </span>
 </div>
 </div>
 
 
 <div class="row mt-4">
   <div class="col-4">
-    <select class="form-select" aria-label="Tipo de documento">
-      <option selected></option>
+    <select class="form-select" formControlName="tipoDocumento" aria-label="Tipo de documento">
+      <option selected value="-">Seleccione Tipo de Documento</option>
       <option value="1">DNI</option>
       <option value="2">NIE</option>
       <option value="3">NIF</option>
     </select>
+    <span class="error" *ngIf="this.formularioContacto.get('tipoDocumento')?.errors?.['pattern']">
+      Debe seleccionar un tipo de documento valido.
+  </span>
   </div>
 
   <div class="col-4">
     <div class="input-group">
         <span class="input-group-text">Num Documento:</span>
-        <input type="text" class="form-control" formControlName="numDocumento" >
+        <input type="text" class="form-control" formControlName="numeroDocumento" >
     </div>
+    <span class="error" *ngIf="this.formularioContacto.get('numeroDocumento')?.errors?.['required']">
+      El numero de documento es obligatorio.
+    </span>
+  <span class="error" *ngIf="this.formularioContacto.get('numeroDocumento')?.errors?.['dni']">
+      El numero de documento debe ser valido de acuerdo a su tipo.
+  </span>
 </div>
 
 <div class="col-4">
@@ -144,11 +177,147 @@
   El email debe ser valido.
 </span>
 </div>
-
-
-
       </form>
     </div>
-
   </div>
+
+  <div class="m-5">
+    <form [formGroup]="formularioSegundo">
+        <div class="row">
+        <div class="col-2">
+            <div class="input-group">
+                <span class="input-group-text">Articulo:*:</span>
+                <input type="text" formControlName="nombreArticulo" class="form-control" name="nombreArticulo">
+            </div>
+            <span class="error" *ngIf="this.formularioSegundo.get('nombreArticulo')?.errors?.['required']">
+                El nombre del articulo es obligatorio.
+            </span>
+            <span class="error" *ngIf="this.formularioSegundo.get('nombreArticulo')?.errors?.['minlength']">
+                El nombre del articulo debe tener minimo 3 caracteres.
+            </span>
+            <span class="error" *ngIf="this.formularioSegundo.get('nombreArticulo')?.errors?.['maxlength']">
+                El nombre del articulo debe tener maximo 15 caracteres.
+            </span>
+        </div>
+        <div class="col-2">
+            <div class="input-group">
+                <span class="input-group-text">Cantidad*:</span>
+                <input type="text" formControlName="cantidad" class="form-control" name="cantidad">
+            </div>
+            <span class="error" *ngIf="this.formularioSegundo.get('cantidad')?.errors?.['required']">
+                La cantidad es obligatoria.
+            </span>
+            <span class="error" *ngIf="this.formularioSegundo.get('cantidad')?.errors?.['pattern']">
+                La cantidad debe ser un numero entre 1 y 9999.
+            </span>
+        </div>
+        <div class="col-2">
+            <div class="input-group">
+                <span class="input-group-text">Precio*:</span>
+                <input type="text" formControlName="precio" class="form-control" name="precio">
+            </div>
+            <span class="error" *ngIf="this.formularioSegundo.get('precio')?.errors?.['required']">
+                El precio es obligatorio.
+            </span>
+            <span class="error" *ngIf="this.formularioSegundo.get('precio')?.errors?.['min']">
+                El precio debe ser un número mayor a 0.
+            </span>
+            <span class="error" *ngIf="this.formularioSegundo.get('precio')?.errors?.['pattern']">
+              El precio debe ser un número mayor a 0.
+          </span>
+        </div>
+        <div class="col-2">
+            <div class="input-group">
+                <select class="form-control text-center" formControlName="ivaSeleccionado">
+                    <option value="21">21%</option>
+                    <option value="10">10%</option>
+                    <option value="4">4%</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-2">
+            <button type="button" class="btn btn-warning" (click)="agregarProducto()">Añadir producto</button>
+        </div>
+    </div>
+    </form>
+    
+    <table class="table table-bordered table-striped mt-5" >
+        <thead>
+          <tr>
+            <th>Numero</th>
+            <th>Articulo</th>
+            <th>Cantidad</th>
+            <th>Precio</th>
+            <th>IVA %</th>
+            <th>IVA</th>
+            <th>Base</th>
+            <th>Total</th>
+            <th>eliminar</th>
+          </tr>
+        </thead>
+        <tbody *ngFor="let linea of lineaPedido">
+          <tr>
+            <td>{{linea.numero}}</td>
+            <td>{{linea.articulo}}</td>
+            <td>{{linea.cantidad}}</td>
+            <td>{{linea.precio}}</td>
+            <td>{{linea.iva_porcentaje}}</td>
+            <td>{{linea.iva}}</td>
+            <td>{{linea.base}}</td>
+            <td>{{linea.total}}</td>
+            <td><button type="button" class="btn btn-danger" (click)="eliminarProducto(linea.numero)">eliminar</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <br>
+    <div class="m-5 row">
+        <div class="col-6">
+            <div class="row mt-3">
+                <div class="col-6 text-center">
+                        <label><b>Base Imponible (21%):</b></label>
+                        <input type="text"  class="form-control text-center" readonly [(ngModel)]="baseImponible21">
+                </div>
+                <div class="col-6 text-center">
+                    <label><b>IVA (21%):</b></label>
+                    <input type="text"  class="form-control text-center" readonly [(ngModel)]="iva21">
+                </div>
+            </div>
+            <div class="row mt-3">
+                <div class="col-6 text-center">
+                    <label><b>Base Imponible (10%):</b></label>
+                    <input type="text"  class="form-control text-center" readonly [(ngModel)]="baseImponible10">
+                </div>
+                <div class="col-6 text-center">
+                    <label><b>IVA (10%):</b></label>
+                    <input type="text"  class="form-control text-center" readonly [(ngModel)]="iva10">
+                </div>
+            </div>
+            <div class="row mt-3">
+                <div class="col-6 text-center">
+                    <label><b>Base Imponible (4%):</b></label>
+                    <input type="text"  class="form-control text-center" readonly [(ngModel)]="baseImponible4">
+                </div>
+                <div class="col-6 text-center">
+                    <label><b>IVA (4%):</b></label>
+                    <input type="text"  class="form-control text-center" readonly [(ngModel)]="iva4">
+                </div>
+            </div>
+            <div class="col-12 text-center mt-3">
+                <label><b>Precio total:</b></label>
+                <input type="text"  class="form-control text-center" readonly [(ngModel)]="precioTotal">
+            </div>
+        </div>
+        <div class="col-6 text-center mt-5">
+            <span style="font-size: large;">Introduzca la suma de los números</span>
+            <div id="cache">
+                <span style="font-size: 30px;">{{valor1}} + {{valor2}}</span> 
+                <span><img src="../assets/img/captcha.png" style="width: 25px;margin-bottom: 5px;margin-left: 50px;" alt="logo_captcha"></span>
+                <br>
+                <input type="text"style="border: black solid 2px; width: 350px;"   [(ngModel)]="suma">
+                <br>
+                <button type="button" class="btn btn-success mt-3 mb-3 w-65" (click)="validarFormulario()">Enviar</button>
+            </div>
+        </div>
+      </div>
 </div>
